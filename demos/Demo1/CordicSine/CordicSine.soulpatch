@@ -1,0 +1,15 @@
+
+{
+    "soulPatchV1":
+    {
+        "ID":               "com.yourcompany.CordicSine",
+        "version":          "0.1",
+        "name":             "CordicSine",
+        "description":      "This is a SOUL Patch called CordicSine!",
+        "category":         "effect",
+        "manufacturer":     "Your Company Name",
+        "isInstrument":     false,
+
+        "source":           [ "CordicSine.soul" ]
+    }
+}

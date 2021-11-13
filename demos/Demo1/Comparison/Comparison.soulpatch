@@ -1,0 +1,15 @@
+
+{
+    "soulPatchV1":
+    {
+        "ID":               "com.yourcompany.comparison",
+        "version":          "0.1",
+        "name":             "comparison",
+        "description":      "This is a SOUL Patch called comparison!",
+        "category":         "effect",
+        "manufacturer":     "Your Company Name",
+        "isInstrument":     false,
+
+        "source":           [ "Comparison.soul" ]
+    }
+}

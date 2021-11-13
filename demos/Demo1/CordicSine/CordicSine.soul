@@ -1,0 +1,25 @@
+processor CordicSine [[ main ]]
+{
+    output stream float32 out;
+    input event float32 frequency [[ name: "Frequency", min: 20, max: 10000, init: 500 ]];
+
+    event frequency (float32 noteFrequency)
+    {
+        let phaseIncrement = float (noteFrequency * twoPi * processor.period);
+
+        multiplier.real = cos (phaseIncrement);
+        multiplier.imag = sin (phaseIncrement);
+    }
+
+    complex value = 1, multiplier = 1;
+
+    void run()
+    {
+        loop
+        {
+            value = value * multiplier;
+            out << value.imag;
+            advance();
+        }
+    }        
+}

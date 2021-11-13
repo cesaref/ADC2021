@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="b0hGSA" name="analyse" projectType="consoleapp" useAppConfig="0"
+              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
+              projectLineFeed="&#10;" cppLanguageStandard="17" companyName="Sound Stacks Ltd">
+  <MAINGROUP id="jmWx2N" name="analyse">
+    <GROUP id="{DC534E90-CA54-6D68-95B7-C7F6ECC78677}" name="Source">
+      <FILE id="z79zQD" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
+    </GROUP>
+  </MAINGROUP>
+  <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1"/>
+  <EXPORTFORMATS>
+    <XCODE_MAC targetFolder="Builds/MacOSX">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug" targetName="analyse" headerPath="../../../../3rdParty/choc"/>
+        <CONFIGURATION isDebug="0" name="Release" targetName="analyse"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_audio_basics" path="../../3rdParty/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../3rdParty/JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="../../3rdParty/JUCE/modules"/>
+        <MODULEPATH id="juce_dsp" path="../../3rdParty/JUCE/modules"/>
+      </MODULEPATHS>
+    </XCODE_MAC>
+  </EXPORTFORMATS>
+  <MODULES>
+    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_dsp" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+  </MODULES>
+</JUCERPROJECT>

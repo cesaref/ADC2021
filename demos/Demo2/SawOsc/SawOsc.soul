@@ -1,0 +1,38 @@
+processor SawOsc [[ main ]]
+{
+    output stream float32 out;
+    input event float32 frequency [[ name: "Frequency", min: 20, max: 10000, init: 500 ]];
+
+    let harmonics = 64;
+
+    event frequency (float32 noteFrequency)
+    {
+        amplitudes = 0;
+
+        for (wrap<harmonics> i)
+        {
+            let harmonicFrequency = noteFrequency * float (i+1);
+            let phaseIncrement = float (harmonicFrequency * twoPi * processor.period);
+
+            multiplier[i].real = cos (phaseIncrement);
+            multiplier[i].imag = sin (phaseIncrement);
+
+            if (harmonicFrequency < (processor.frequency /2))
+                amplitudes[i] = 1.0f / float(i+1);
+        }
+    }
+
+    complex<harmonics> value = 1, multiplier = 1;
+    float<harmonics> amplitudes;
+
+    // ------------------------
+    void run()
+    {
+        loop
+        {
+            value = value * multiplier;
+            out << sum (value.imag * amplitudes);
+            advance();
+        }
+    }        
+}

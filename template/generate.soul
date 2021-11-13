@@ -1,0 +1,118 @@
+//==============================================================================
+graph Voice
+{
+    output stream float audioOut;
+
+    let
+    {
+        osc = OscillatorBank (${HARMONICS}, ${FREQUENCY});
+        amplitudeSource = AmplitudeSource (${HARMONICS}, ${FRAMES_BETWEEN_SAMPLES});
+    }
+
+    connection
+    {
+        amplitudeSource.out -> osc.amplitudes;
+        osc.audioOut        -> audioOut;
+    }
+}
+
+
+//==============================================================================
+processor OscillatorBank (int size = 64, float64 noteFrequency)
+{
+    input stream float<size> amplitudes;
+
+    output stream float audioOut;
+
+    void setMultipliers()
+    {
+        let nyquist = float (processor.frequency / 2.0);
+
+        for (wrap<size> i)
+        {
+            let harmonicFrequency = float (noteFrequency * (int (i) + 1));
+
+            if (harmonicFrequency < nyquist)
+            {
+                let angle = float32 (twoPi * harmonicFrequency * processor.period);
+                multiplier[i].real = cos (angle);
+                multiplier[i].imag = sin (angle);
+            }
+            else
+            {
+                multiplier[i] = 1.0f;
+            }
+        }
+    }
+
+    complex32<size> oscillators = 1.0f, multiplier = 1.0f;
+
+    void run()
+    {
+        setMultipliers();
+        
+        loop
+        {
+            oscillators = oscillators * multiplier;
+
+            if const (size == 1)
+                audioOut << oscillators.imag * amplitudes;
+            else
+                audioOut << sum (oscillators.imag * amplitudes);
+
+            advance();
+        }
+    }
+}
+
+
+
+//==============================================================================
+processor AmplitudeSource (int size = 64, int stepRate = 1024)
+{
+    input event soul::note_events::NoteOn noteOn;
+    output stream float<size> out;
+
+    float<size>[] amplitudes = (
+${AMPLITUDES}
+    );
+
+    void next()
+    {
+        if (nextSlot < amplitudes.size - 1)
+        {
+            value = amplitudes.at (nextSlot);
+            increment = (amplitudes.at (nextSlot + 1) - amplitudes.at (nextSlot)) / float<size> (stepRate);
+            nextSlot++;
+            steps = stepRate;
+        }
+        else
+        {
+            increment = 0;
+            steps = stepRate;
+        }
+    }
+
+    float<size> value, increment;
+    int nextSlot, steps;
+
+    void run()
+    {
+        value = amplitudes[0];
+        increment = (amplitudes[1] - amplitudes[0]) / float<size> (stepRate);
+        nextSlot = 1;
+        steps = stepRate;
+        
+        loop
+        {
+            out << value;
+            value += increment;
+            steps--;
+
+            if (steps == 0)
+                next();
+
+            advance();
+        }
+    }
+}

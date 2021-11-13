@@ -1,0 +1,6 @@
+[submodule "3rdParty/JUCE"]
+	path = 3rdParty/JUCE
+	url = git@github.com:juce-framework/JUCE.git
+[submodule "3rdParty/choc"]
+	path = 3rdParty/choc
+	url = git@github.com:Tracktion/choc.git

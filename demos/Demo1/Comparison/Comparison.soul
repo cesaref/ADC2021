@@ -1,0 +1,110 @@
+//==============================================================================
+graph comparison [[ main ]]
+{
+    output stream float32 out;
+    input event float32 frequency [[ name: "Frequency", min: 20, max: 10000, init: 500 ]];
+    input mixer.mix;
+
+    let
+    {
+        sineOsc = Sine;
+        cordicOsc = CordicSine;
+        mixer = Mixer;
+    }
+
+    connection
+    {
+        frequency -> sineOsc, cordicOsc;
+
+        sineOsc.out -> mixer.in1;
+        cordicOsc.out -> mixer.in2;
+
+        mixer.out -> out;
+    }
+
+}
+
+//==============================================================================
+processor Mixer
+{
+    input stream float32 in1, in2;
+    input event float32 mix [[ name: "Mix", min: 0, max: 1, init: 0, step: 0.1 ]];
+
+    output stream float32 out;
+
+    float in1Multiplier;
+    float in2Multiplier;
+
+    event mix (float32 f)
+    {
+        in1Multiplier = f;
+        in2Multiplier = - (1.0f - f);
+    }
+
+    void run()
+    {
+        loop
+        {
+            out << (in1 * in1Multiplier) + (in2 * in2Multiplier);
+            advance();
+        }
+
+    }
+}
+
+
+//==============================================================================
+processor Sine
+{
+    output stream float32 out;
+    input event float32 frequency;
+
+    event frequency (float32 noteFrequency)
+    {
+        phaseIncrement = float (noteFrequency * twoPi * processor.period);
+    }
+
+    float phase, phaseIncrement;
+
+    void run()
+    {
+        loop
+        {
+            phase += phaseIncrement;
+
+            if (phase > twoPi)
+                phase -= float (twoPi);
+
+            out << sin (phase);
+            advance();
+        }
+    }        
+}
+
+
+//==============================================================================
+processor CordicSine
+{
+    output stream float32 out;
+    input event float32 frequency;
+
+    event frequency (float32 noteFrequency)
+    {
+        let phaseIncrement = float (noteFrequency * twoPi * processor.period);
+
+        multiplier.real = cos (phaseIncrement);
+        multiplier.imag = sin (phaseIncrement);
+    }
+
+    complex value = 1, multiplier = 1;
+
+    void run()
+    {
+        loop
+        {
+            value = value * multiplier;
+            out << value.imag;
+            advance();
+        }
+    }        
+}
