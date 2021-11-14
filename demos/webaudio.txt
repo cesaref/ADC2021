@@ -1,0 +1,16 @@
+
+Demo1:
+
+CordicSine -        https://soul.dev/lab?id=4cdf16afd2fec2280667b92828aeac65
+Comparison -        https://soul.dev/lab?id=418882fb864dbfe9f65bf9eb376fd09a
+ComparisonFloat64 - https://soul.dev/lab?id=b251e03bf2f266cd547fb9509a1ec3c5
+
+Demo2:
+
+SawOsc -            https://soul.dev/lab?id=9b5cca7b630c6c9657251b13758724df
+
+Instrument Demo:
+
+B3 -                https://soul.dev/lab?id=a47aa24dbc232ea1281aa621fe679ee1
+Equator -           https://soul.dev/lab?id=e712dacde106b2db3bf9b0a13bb7229f
+Rhodes -            https://soul.dev/lab?id=aeb0edce90a3b84046ba285cdfb566fc
